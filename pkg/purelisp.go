@@ -11,8 +11,12 @@ import (
 type Environment = eval.Environment
 
 // NewEnvironment は新しい環境を作成する関数
-func NewEnvironment(parent *Environment) *Environment {
-	return eval.NewEnvironment(parent)
+func NewEnvironment() *eval.Environment {
+	env := eval.NewEnvironment(nil)
+	for name, fn := range functions.NewNativeFunctions() {
+		env.SetVar(name, fn)
+	}
+	return env
 }
 
 // Eval は式を評価する関数

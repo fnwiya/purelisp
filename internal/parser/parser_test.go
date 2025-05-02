@@ -86,7 +86,6 @@ func TestParse(t *testing.T) {
 	}
 }
 
-// equalValue は2つのValue型の値が等しいかどうかを判定する
 func equalValue(v1, v2 types.Value) bool {
 	if v1 == nil && v2 == nil {
 		return true

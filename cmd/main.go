@@ -9,11 +9,11 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Fprintf(os.Stderr, "Usage: %s <lisp expression>\n", os.Args[0])
+		fmt.Println("Usage: purelisp <expression>")
 		os.Exit(1)
 	}
 
-	env := purelisp.NewEnvironment(nil)
+	env := purelisp.NewEnvironment()
 
 	// 基本的な関数を環境に登録
 	funcs := purelisp.NewNativeFunctions()
@@ -24,15 +24,15 @@ func main() {
 	// コマンドライン引数から式をパース
 	expr, err := purelisp.Parse(os.Args[1])
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Parse error: %v\n", err)
+		fmt.Printf("Parse error: %v\n", err)
 		os.Exit(1)
 	}
 
 	result, err := purelisp.Eval(expr, env)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Eval error: %v\n", err)
+		fmt.Printf("Eval error: %v\n", err)
 		os.Exit(1)
 	}
 
-	fmt.Printf("Result: %v\n", result)
+	fmt.Println(result)
 }
