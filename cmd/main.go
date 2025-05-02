@@ -4,11 +4,15 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/fnwiya/purelisp/internal/types"
 	purelisp "github.com/fnwiya/purelisp/pkg"
 )
 
 func main() {
+	if len(os.Args) < 2 {
+		fmt.Fprintf(os.Stderr, "Usage: %s <lisp expression>\n", os.Args[0])
+		os.Exit(1)
+	}
+
 	env := purelisp.NewEnvironment(nil)
 
 	// 基本的な関数を環境に登録
@@ -17,21 +21,16 @@ func main() {
 		env.SetVar(name, fn)
 	}
 
-	// サンプルコードの実行
-	expr := &types.List{
-		Car: &types.Atom{Value: "cons"},
-		Cdr: &types.List{
-			Car: &types.Atom{Value: "a"},
-			Cdr: &types.List{
-				Car: &types.Atom{Value: "b"},
-				Cdr: types.Nil,
-			},
-		},
+	// コマンドライン引数から式をパース
+	expr, err := purelisp.Parse(os.Args[1])
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Parse error: %v\n", err)
+		os.Exit(1)
 	}
 
 	result, err := purelisp.Eval(expr, env)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Eval error: %v\n", err)
 		os.Exit(1)
 	}
 

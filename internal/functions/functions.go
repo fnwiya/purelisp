@@ -22,6 +22,17 @@ func (n *NativeFunction) String() string {
 func NewNativeFunctions() map[string]types.Value {
 	funcs := make(map[string]types.Value)
 
+	funcs["quote"] = &NativeFunction{
+		name: "quote",
+		Fn: func(args types.Value) types.Value {
+			if args == nil || args.IsAtom() {
+				return types.Nil
+			}
+			list := args.(*types.List)
+			return list.Car
+		},
+	}
+
 	funcs["atom"] = &NativeFunction{
 		name: "atom",
 		Fn: func(args types.Value) types.Value {
